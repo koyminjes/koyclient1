@@ -1,0 +1,49 @@
+name: Build KoyClient
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.12'
+
+      - name: Build the mod
+        working-directory: mod
+        run: gradle build --no-daemon
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build the launcher exe
+        working-directory: launcher
+        run: >
+          dotnet publish KoyLauncher -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ../dist
+
+      - name: Put the mod jar next to the exe
+        shell: pwsh
+        run: |
+          Remove-Item dist/*.pdb -ErrorAction SilentlyContinue
+          $jar = Get-ChildItem mod/build/libs/*.jar | Where-Object { $_.Name -notlike '*-sources.jar' } | Select-Object -First 1
+          $suffix = $jar.Name -replace '^koyclient-', ''
+          Copy-Item $jar.FullName "dist/koyclient-1.21.4-$suffix"
+          Get-ChildItem dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KoyClient
+          path: dist
+          if-no-files-found: error
