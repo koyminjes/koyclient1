@@ -1,0 +1,100 @@
+<Window x:Class="KoyLauncher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="KoyClient" Width="900" Height="640"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="CanMinimize"
+        Background="{StaticResource Bg}" Foreground="White" FontFamily="Segoe UI">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="36"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Title bar -->
+    <Grid Grid.Row="0" Background="{StaticResource Panel}" MouseLeftButtonDown="TitleBar_MouseDown">
+      <TextBlock Text="KoyClient" Margin="14,0" VerticalAlignment="Center" FontWeight="SemiBold"/>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button Content="&#x2014;" Width="44" Style="{StaticResource GhostButton}" Click="Minimize_Click"/>
+        <Button Content="&#x2715;" Width="44" Style="{StaticResource GhostButton}" Click="Close_Click"/>
+      </StackPanel>
+    </Grid>
+
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="210"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- Sidebar -->
+      <Border Grid.Column="0" Background="{StaticResource Panel}" BorderThickness="0,1,0,0" BorderBrush="#222632">
+        <DockPanel Margin="16" LastChildFill="False">
+          <StackPanel DockPanel.Dock="Top">
+            <TextBlock Text="KOYCLIENT" FontSize="20" FontWeight="Bold" Margin="4,8,0,24"/>
+            <Button x:Name="NavPlay" Content="Play" Style="{StaticResource NavButton}" Click="NavPlay_Click"/>
+            <Button x:Name="NavSettings" Content="Settings" Style="{StaticResource NavButton}"
+                    Margin="0,6,0,0" Click="NavSettings_Click"/>
+          </StackPanel>
+          <StackPanel DockPanel.Dock="Bottom">
+            <TextBlock Text="ACCOUNT" Foreground="{StaticResource TextDim}" FontSize="11" Margin="4,0,0,0"/>
+            <TextBlock x:Name="AccountText" Text="Not signed in" Margin="4,2,0,8"
+                       TextTrimming="CharacterEllipsis"/>
+            <Button x:Name="SignInButton" Content="Sign in with Microsoft"
+                    Style="{StaticResource GhostButton}" Click="SignIn_Click"/>
+          </StackPanel>
+        </DockPanel>
+      </Border>
+
+      <!-- Content -->
+      <Grid Grid.Column="1" Margin="36">
+
+        <StackPanel x:Name="PlayPanel">
+          <TextBlock Text="Ready to play" FontSize="30" FontWeight="Bold"/>
+          <TextBlock x:Name="VersionText" Foreground="{StaticResource TextDim}" Margin="0,4,0,18"/>
+          <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <ComboBox x:Name="VersionBox" Width="200" Height="32" Foreground="Black"
+                      VerticalContentAlignment="Center" SelectionChanged="VersionBox_Changed"/>
+            <ComboBox x:Name="LoaderBox" Width="190" Height="32" Margin="12,0,0,0" Foreground="Black"
+                      VerticalContentAlignment="Center" SelectionChanged="LoaderBox_Changed">
+              <ComboBoxItem Content="Fabric + KoyClient"/>
+              <ComboBoxItem Content="Vanilla"/>
+            </ComboBox>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+            <CheckBox x:Name="SnapshotsBox" Content="Snapshots" Foreground="White" Click="VersionFilter_Click"/>
+            <CheckBox x:Name="OldBox" Content="Old alpha/beta" Foreground="White" Margin="16,0,0,0"
+                      Click="VersionFilter_Click"/>
+          </StackPanel>
+          <Button x:Name="PlayButton" Content="PLAY" Width="220" Height="52" FontSize="18"
+                  HorizontalAlignment="Left" Style="{StaticResource PrimaryButton}" Click="Play_Click"/>
+          <ProgressBar x:Name="Progress" Height="6" Margin="0,24,0,8" Minimum="0" Maximum="1" Value="0"
+                       Foreground="{StaticResource Accent}" Background="{StaticResource Panel}"
+                       BorderThickness="0"/>
+          <TextBlock x:Name="StatusText" Text="Idle" Foreground="{StaticResource TextDim}"/>
+          <TextBox x:Name="LogBox" Height="120" Margin="0,16,0,0" IsReadOnly="True" TextWrapping="Wrap"
+                   Background="{StaticResource Panel}" Foreground="#C9CED8" BorderThickness="0"
+                   FontFamily="Consolas" FontSize="12" Padding="10" VerticalScrollBarVisibility="Auto"/>
+        </StackPanel>
+
+        <StackPanel x:Name="SettingsPanel" Visibility="Collapsed">
+          <TextBlock Text="Settings" FontSize="30" FontWeight="Bold" Margin="0,0,0,24"/>
+
+          <TextBlock Text="Memory" Foreground="{StaticResource TextDim}"/>
+          <StackPanel Orientation="Horizontal" Margin="0,6,0,20">
+            <Slider x:Name="RamSlider" Width="320" Minimum="1024" Maximum="16384" TickFrequency="512"
+                    IsSnapToTickEnabled="True" VerticalAlignment="Center" ValueChanged="RamSlider_Changed"/>
+            <TextBlock x:Name="RamLabel" Margin="14,0,0,0" VerticalAlignment="Center"/>
+          </StackPanel>
+
+          <CheckBox x:Name="CloseOnLaunchBox" Content="Close the launcher when the game starts"
+                    Foreground="White" Click="Settings_Changed"/>
+
+          <TextBlock Text="Game folder" Foreground="{StaticResource TextDim}" Margin="0,24,0,6"/>
+          <TextBlock x:Name="GameDirText" TextWrapping="Wrap"/>
+          <Button Content="Open folder" Width="140" HorizontalAlignment="Left" Margin="0,10,0,0"
+                  Padding="0,8" Style="{StaticResource GhostButton}" Click="OpenFolder_Click"/>
+        </StackPanel>
+
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>

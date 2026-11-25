@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>KoyClientLauncher</AssemblyName>
+    <RootNamespace>KoyLauncher</RootNamespace>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Floating versions on purpose: pin to exact versions once it builds on your machine. -->
+    <PackageReference Include="CmlLib.Core" Version="4.*" />
+    <PackageReference Include="CmlLib.Core.Auth.Microsoft" Version="3.*" />
+  </ItemGroup>
+
+</Project>
